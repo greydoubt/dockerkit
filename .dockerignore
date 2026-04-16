@@ -1,2 +1,5 @@
 virus
+requirements.txt
+go.mod
 secret.key
+*
