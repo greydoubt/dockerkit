@@ -1,9 +1,11 @@
 # syntax=docker/dockerfile:1
 
+
+ARG GO_VERSION=1.26.2
+
 # ALPINE_VERSION sets the version of the alpine base image to use.
 # It must be a supported tag in the docker.io/library/alpine image repository.
 ARG ALPINE_VERSION=3.23
-
 FROM alpine:${ALPINE_VERSION} AS gen
 RUN apk add --no-cache bash git
 WORKDIR /src
@@ -27,12 +29,7 @@ fi
 EOT
 
 
-ARG GO_VERSION=1.26.2
 
-# ALPINE_VERSION sets the version of the alpine base image to use, including for the golang image.
-# It must be a supported tag in the docker.io/library/alpine image repository
-# that's also available as alpine image variant for the Golang version used.
-ARG ALPINE_VERSION=3.23
 
 # BUILDX_VERSION sets the version of buildx to install in the dev container.
 # It must be a valid tag in the docker.io/docker/buildx-bin image repository
@@ -117,3 +114,84 @@ COPY --link --from=goversioninfo   /go/bin/* /go/bin/
 WORKDIR /go/src/github.com/docker/cli
 ENV GO111MODULE=auto
 COPY --link . .
+
+
+
+ARG GO_VERSION=1.26.2
+
+# ALPINE_VERSION sets the version of the alpine base image to use, including for the golang image.
+# It must be a supported tag in the docker.io/library/alpine image repository
+# that's also available as alpine image variant for the Golang version used.
+ARG ALPINE_VERSION=3.23
+# GOLANGCI_LINT_VERSION sets the version of the golangci/golangci-lint image to use.
+ARG GOLANGCI_LINT_VERSION=v2.9.0
+
+FROM golangci/golangci-lint:${GOLANGCI_LINT_VERSION}-alpine AS golangci-lint
+
+FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS lint
+ENV GOTOOLCHAIN=local
+ENV GO111MODULE=auto
+ENV CGO_ENABLED=0
+ENV GOGC=75
+WORKDIR /go/src/github.com/docker/cli
+COPY --link --from=golangci-lint /usr/bin/golangci-lint /usr/bin/golangci-lint
+RUN --mount=type=bind,target=.,rw \
+    --mount=type=cache,target=/root/.cache \
+        rm -f go.mod go.sum && \
+        ln -s vendor.mod go.mod && \
+        ln -s vendor.sum go.sum && \
+        golangci-lint run
+
+
+
+
+FROM koalaman/shellcheck-alpine:v0.7.1 AS shellcheck
+WORKDIR /go/src/github.com/docker/cli
+RUN --mount=type=bind,target=. \
+  set -eo pipefail; \
+  find scripts/ contrib/completion/bash -type f | grep -v scripts/winresources | grep -v '.*.ps1' | xargs shellcheck
+
+
+  
+ARG MODOUTDATED_VERSION=v0.8.0
+
+FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS base
+ENV GOTOOLCHAIN=local
+RUN apk add --no-cache bash git rsync
+WORKDIR /src
+
+FROM base AS vendored
+ENV GOPROXY=https://proxy.golang.org|direct
+RUN --mount=target=/context \
+    --mount=target=.,type=tmpfs  \
+    --mount=target=/go/pkg/mod,type=cache <<EOT
+set -e
+rsync -a /context/. .
+./scripts/with-go-mod.sh ./scripts/vendor update
+mkdir /out
+cp -r vendor.mod vendor.sum vendor /out
+EOT
+
+FROM scratch AS update
+COPY --from=vendored /out /out
+
+FROM vendored AS validate
+RUN --mount=target=/context \
+    --mount=target=.,type=tmpfs <<EOT
+set -e
+rsync -a /context/. .
+git add -A
+rm -rf vendor
+cp -rf /out/* .
+./scripts/with-go-mod.sh ./scripts/vendor validate
+EOT
+
+FROM psampaz/go-mod-outdated:${MODOUTDATED_VERSION} AS go-mod-outdated
+FROM base AS outdated
+RUN --mount=target=.,rw \
+    --mount=target=/go/pkg/mod,type=cache \
+    --mount=from=go-mod-outdated,source=/home/go-mod-outdated,target=/usr/bin/go-mod-outdated \
+    ./scripts/with-go-mod.sh ./scripts/vendor outdated
+
+
+
