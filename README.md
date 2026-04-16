@@ -6,49 +6,62 @@
 
 
 
-
+## Build
 ```
-Build
+
 docker build -t dockerkit-dev --target dev .
-Run
+```
+
+## Run
+```
 docker run -it dockerkit-dev
 Inside the container
+```
 
-Run:
 
+## Run:
+```
 make help
-Preconfigured:
-Bash completion
-Custom prompt
-Development tools
-🧪 Available Stages
-📄 Authors
-gen – Generates AUTHORS file
-validate – Verifies AUTHORS is up-to-date
-🧹 Formatting
+```
+
+
+
 gofumpt – Formats Go code
-🧪 Testing
+
+
+
 gotestsum – Runs Go tests with enhanced output
-🔍 Linting
+
+
+
 lint – Runs golangci-lint
+
 shellcheck – Validates shell scripts
-📦 Dependencies
+
+
 vendored – Generates vendor directory
+
 validate – Ensures vendor consistency
+
 outdated – Checks for outdated dependencies
-🧬 Example Workflows
-Validate AUTHORS
+
+
+
+# 🧬 Example Workflows
+## Validate AUTHORS
 docker build --target validate .
-Run Linter
-docker build --target lint .
-Check Shell Scripts
-docker build --target shellcheck .
-Update Vendor Dependencies
-docker build --target vendored .
-Check Outdated Modules
-docker build --target outdated .
 
+# Run Linter
+## docker build --target lint .
 
+# Check Shell Scripts
+## docker build --target shellcheck .
+
+# Update Vendor Dependencies
+## docker build --target vendored .
+
+# Check Outdated Modules
+## docker build --target outdated .
 
 ```
 
