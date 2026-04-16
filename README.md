@@ -4,18 +4,25 @@
 
 ## Best Practices for Layer Caching
 
-	- Order instructions by stability: Place instructions that change less frequently earlier in the Dockerfile to maximize cache usage.
+- Order instructions by stability: Place instructions that change less frequently earlier in the Dockerfile to maximize cache usage.
 
-	
-	- Separate dependencies from code: Copy and install dependencies before copying application code to avoid reinstalling dependencies when only code changes.
-    - Combine related commands: Use a single RUN instruction with multiple commands connected by && for related operations to reduce layer count and prevent partial state caching.
-    - Use .dockerignore: Exclude files that don't need to be in the build context to prevent unnecessary cache invalidation.
-    - Use specific base image tags: Use specific version tags for base images instead of 'latest' to ensure consistent parent layers.
-    - Consider multi-stage builds: Use multi-stage builds to separate build-time dependencies from runtime dependencies, reducing final image size.
-    - Use BuildKit cache mounts: For package managers and compilers with their own caching mechanisms, use BuildKit cache mounts to persist caches between builds.
-    - Cache downloaded files: If your build downloads files, consider caching them in a separate layer to avoid re-downloading them on each build.
-    - Be careful with wildcards: Using wildcards in COPY or ADD instructions can lead to unexpected cache invalidation if files are added or removed.
-    - Update package managers atomically: For apt, yum, or other package managers, update and install packages in a single RUN instruction to ensure consistency.
+- Separate dependencies from code: Copy and install dependencies before copying application code to avoid reinstalling dependencies when only code changes.
+    
+- Combine related commands: Use a single RUN instruction with multiple commands connected by && for related operations to reduce layer count and prevent partial state caching.
+    
+- Use .dockerignore: Exclude files that don't need to be in the build context to prevent unnecessary cache invalidation.
+    
+- Use specific base image tags: Use specific version tags for base images instead of 'latest' to ensure consistent parent layers.
+    
+- Consider multi-stage builds: Use multi-stage builds to separate build-time dependencies from runtime dependencies, reducing final image size.
+   
+- Use BuildKit cache mounts: For package managers and compilers with their own caching mechanisms, use BuildKit cache mounts to persist caches between builds.
+    
+- Cache downloaded files: If your build downloads files, consider caching them in a separate layer to avoid re-downloading them on each build.
+
+- Be careful with wildcards: Using wildcards in COPY or ADD instructions can lead to unexpected cache invalidation if files are added or removed.
+    
+- Update package managers atomically: For apt, yum, or other package managers, update and install packages in a single RUN instruction to ensure consistency.
 
 
 
