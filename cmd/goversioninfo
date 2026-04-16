@@ -1,0 +1,4 @@
+cmd/goversioninfo
+
+gofumpt@${GOFUMPT_VERSION}
+@${GOFUMPT_VERSION} = YOUR_M0M
