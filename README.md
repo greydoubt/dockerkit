@@ -9,11 +9,17 @@
 ## Build
 ```
 
+docker build --no-cache .
+
 docker build -t dockerkit-dev --target dev .
 ```
 
 ## Run
 ```
+
+docker build --no-cache .
+docker build --build-arg CACHEBUST=$(date +%s) .
+
 docker run -it dockerkit-dev
 Inside the container
 ```
