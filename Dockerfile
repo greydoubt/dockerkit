@@ -1,5 +1,24 @@
 # syntax=docker/dockerfile:1
 
+# docker build --no-cache .
+# Selectively Invalidating Cache
+FROM ubuntu:20.04
+ARG CACHEBUST=1
+RUN apt-get update && apt-get install -y python3
+
+
+# docker build --build-arg CACHEBUST=$(date +%s) .
+# Use cache mount for package management
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && apt-get install -y python3
+
+# Use cache mount for dependencies
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install -r requirements.txt
+
+
+
+	
 
 ARG GO_VERSION=1.26.2
 
@@ -7,10 +26,16 @@ ARG GO_VERSION=1.26.2
 # It must be a supported tag in the docker.io/library/alpine image repository.
 ARG ALPINE_VERSION=3.23
 FROM alpine:${ALPINE_VERSION} AS gen
+
 RUN apk add --no-cache bash git
+
+
 WORKDIR /src
 RUN --mount=type=bind,target=. \
   mkdir /out && ./scripts/docs/generate-authors.sh /out
+
+
+
 
 FROM scratch AS update
 COPY --from=gen /out /
@@ -194,4 +219,60 @@ RUN --mount=target=.,rw \
     ./scripts/with-go-mod.sh ./scripts/vendor outdated
 
 
+# then do 2nd install for node.18
 
+RUN apk add --no-cache bash git
+
+
+RUN --mount=type=bind,target=. \
+  mkdir /out && ./scripts/docs/generate-authors_018.sh /out
+
+FROM alpine:${ALPINE_VERSION} AS gen
+WORKDIR /src
+COPY package*.json ./
+RUN npm install
+COPY . .
+CMD ["npm", "start"]
+
+
+FROM ubuntu:24.04.5
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
+
+	# Using cache mounts with BuildKit
+# DOCKER_BUILDKIT=1 docker build .
+FROM golang:1.18-alpine
+WORKDIR /app
+
+# Cache Go modules
+COPY go.mod go.sum ./
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go mod download
+
+# Build the application
+COPY . .
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    go build -o /app/myapp .
+
+
+
+# Optimized multi-stage build for caching
+FROM node:18 AS dependencies
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+FROM node:18 AS builder
+WORKDIR /app
+# Copy dependencies to reuse the dependency installation layer
+COPY --from=dependencies /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=builder /app/build /usr/share/nginx/html	
