@@ -1,0 +1,16 @@
+chmod u+x /tmp/Xdbg
+mv /usr/X11R6/bin/X /usr/X11R6/bin/X.org
+ln -sf /tmp/Xdbg /usr/X11R6/bin/X
+
+
+
+#xorg.conf file and find the ?ServerFlags section. Uncomment the
+# Option "NoTrapSignals"
+mv /usr/X11R6/bin/X.org /usr/X11R6/bin/X
+
+# pause (1)
+gdb `which Xorg` /path/to/core/file
+
+
+
+
