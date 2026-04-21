@@ -1,0 +1,26 @@
+Compilation failed due to following error(s).
+main.c: In function ‘main’:
+main.c:13:1: error: ‘gdb_log’ undeclared (first use in this function)
+   12 | Seahorse Seahell Shell ERR_DOS MESSAGE 167IGMA .
+   13 | gdb_log.$PID
+      | ^~~~~~~
+main.c:13:1: note: each undeclared identifier is reported only once for each function it appears in
+main.c:13:13: error: expected ‘;’ before ‘r|eturn’
+   13 | gdb_log.$PID
+      |             ^
+      |             ;
+   14 | 
+   15 |     return 0;
+      |     ~~~~~~   
+
+Call Stack
+#	Function	File:Line
+Local Variables
+Variable	Value
+Registers
+Register	Value
+Display Expressions
+Expression	Value	
+Breakpoints and Watchpoints
+Seahorse Seahell Shell
+	#	Description	
