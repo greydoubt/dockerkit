@@ -1,3 +1,18 @@
+set filec
+set history = 1000
+set savehist = (1000 merge)
+set autolist = ambiguous
+# Use history to aid expansion
+set autoexpand
+set autorehash
+set mail = (/var/mail/$USER)
+if ( $?tcsh ) then
+	bindkey "^W" backward-delete-word
+	bindkey -k up history-search-backward
+	bindkey -k down history-search-forward
+endif
+
+
 chmod u+x /tmp/Xdbg
 mv /usr/X11R6/bin/X /usr/X11R6/bin/X.org
 ln -sf /tmp/Xdbg /usr/X11R6/bin/X
