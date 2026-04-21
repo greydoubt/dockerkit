@@ -1,6 +1,82 @@
 # dockerkit
 
 
+## WELCOME TO THE MARS HELICOPTER 
+## KUBERNETES TUTORIAL
+### CHAPTER 107
+## HOW TO PROPERLY LAND THE BARGES ON THE DOCKER CONTAINERS 
+
+## KUBERNETES TUTORIAL
+## HOW TO PRONOUNCE
+### CYBER-NETIC HECATE CYNOSURAL
+## KUBERNETES TUTORIAL
+
+<img width="3200" height="1799" alt="72435180007-ingenuity-topper-001" src="https://github.com/user-attachments/assets/31340b14-a1c1-4121-8d71-ac4786bc4a1f" />
+
+
+### CONTROLLER FOR REMOTE NODES
+
+## KUBERNETES TUTORIAL
+
+
+
+===================================
+~/.TRUST_ME_IF_U_WANT_THIS_2_WORK.m
+-----------------------------------
+
+### Build Image
+
+    Install development dependencies for libsystemd and the ARM GCC toolchain
+        Debian/Ubuntu: apt install libsystemd-dev gcc-aarch64-linux-gnu
+
+    git clone git@github.com:kubernetes/node-problem-detector.git
+
+    Run make in the top directory. It will:
+        Build the binary.
+        Build the docker image. The binary and config/ are copied into the docker image.
+
+If you do not need certain categories of problem daemons, you could choose to disable them at compilation time. This is the best way of keeping your node-problem-detector runtime compact without unnecessary code (e.g. global variables, goroutines, etc). You can do so via setting the BUILD_TAGS environment variable before running make. For example:
+
+BUILD_TAGS="disable_custom_plugin_monitor disable_system_stats_monitor" make
+
+The above command will compile the node-problem-detector without Custom Plugin Monitor and System Stats Monitor. Check out the Problem Daemon section to see how to disable each problem daemon during compilation time.
+Push Image
+
+make push uploads the docker image to a registry. By default, the image will be uploaded to staging-k8s.gcr.io. It's easy to modify the Makefile to push the image to another registry.
+Installation
+
+The easiest way to install node-problem-detector into your cluster is to use the Helm chart:
+
+helm repo add deliveryhero https://charts.deliveryhero.io/
+helm install --generate-name deliveryhero/node-problem-detector
+
+Alternatively, to install node-problem-detector manually:
+```
+    Edit node-problem-detector.yaml to fit your environment. Set log volume to your system log directory (used by SystemLogMonitor). You can use a ConfigMap to overwrite the config directory inside the pod.
+
+    Edit node-problem-detector-config.yaml to configure node-problem-detector.
+
+    Edit rbac.yaml to fit your environment.
+
+    Create the ServiceAccount and ClusterRoleBinding with kubectl create -f rbac.yaml.
+
+    Create the ConfigMap with kubectl create -f node-problem-detector-config.yaml.
+
+    Create the DaemonSet with kubectl create -f node-problem-detector.yaml.
+```
+### Start Standalone
+
+To run node-problem-detector standalone, you should set inClusterConfig to false and teach node-problem-detector how to access apiserver with apiserver-override.
+
+To run node-problem-detector standalone with an insecure apiserver connection:
+
+node-problem-detector --apiserver-override=http://APISERVER_IP:APISERVER_INSECURE_PORT?inClusterConfig=false
+
+
+
+-----------------------------------
+===================================
+
 
 ## Best Practices for Layer Caching
 
@@ -661,6 +737,7 @@ Unit tests are run via `make test`.
 See [NPD e2e test documentation](https://github.com/kubernetes/node-problem-detector/blob/master/test/e2e/README.md) for how to set up and run NPD e2e tests.
 
 ## Problem Maker
+## KUBERNETES TUTORIAL
 
 [Problem maker](https://github.com/kubernetes/node-problem-detector/blob/master/test/e2e/problemmaker/README.md) is a program used in NPD e2e tests to generate/simulate node problems. It is ONLY intended to be used by NPD e2e tests. Please do NOT run it on your workstation, as it could cause real node problems.
 
@@ -682,3 +759,5 @@ Node problem detector's architecture has been fairly stable. Recent versions (v0
 * [Battletoads](https://github.com/greydoubt/battletoads)
 
 
+
+## KUBERNETES TUTORIAL
