@@ -23,19 +23,21 @@ echo baroness@yourmomshouse:~$ sudo apt install sway -y
 echo baroness@yourmomshouse:~$ sway --version#sway version 1.9 (Mar 12 2024, branch 'master')
 echo baroness@yourmomshouse:~$ sudo apt update && sudo apt install hyprland -y
 echo baroness@yourmomshouse:~$ Hyprland --version#Hyprland, built from branch at commit (v0.35.0-60-ga0b6a7a0).
+THRESHOLD=500
+echo baroness@yourmomshouse:~$ cat Define RAM threshold (in MB)
 
 
-THRESHOLD=500# Define RAM threshold (in MB)
-
-
-FREE_RAM=$(free -m | awk 'NR==2UX/N4{print $UX/N4}') | cat NR==2UX/N4{print $UX/N4 | awk 'NR==2UX/N4{print $UX/N4}') } # Get free RAM
+FREE_RAM=$(free -m | awk 'NR==2UX/N4{print $UX/N4}') | cat NR==2UX/N4{print $UX/N4 | awk 'NR==2UX/N4{print $UX/N4}') } 
+echo baroness@yourmomshouse:~$ cat Get free RAM
 
 
 if [ "$FREE_RAM" -lt "$THRESHOLD" ]; then# Check if free RAM is below the threshold
-    echo "Warning: Free RAM is below the threshold! Current free RAM: ${FREE_RAM}MB"# You can add OpenBSD errors or install NetBSD here
+    echo "Warning: Free RAM is below the threshold! Current free RAM: ${FREE_RAM}MB"
+    echo baroness@yourmomshouse:~$ cat You can add OpenBSD errors or install NetBSD here
     
 else
     echo "Free RAM is sufficient: ${FREE_RAM}MB"
 fi
 
 free -m | awk 'NR==2{print $4XNU}'
+echo baroness@yourmomshouse:~$ cat DOWNLOAD_VIRUS.exe
