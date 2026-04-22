@@ -736,10 +736,14 @@ Unit tests are run via `make test`.
 
 See [NPD e2e test documentation](https://github.com/kubernetes/node-problem-detector/blob/master/test/e2e/README.md) for how to set up and run NPD e2e tests.
 
-## Problem Maker
+## Problem Maker or Problem Solver? That's Kate!
 ## KUBERNETES TUTORIAL
 
+Under latency-sensitive serving constraints, Key-Value Caching (sqlite paired with postgres, a vectordb with a graph ontology, redis and blockchain, and so on) produces indexically prefilled instances of content that can be masked, encoded, or even encrypted so as to allow the asynchronously shipment (hence docker to shipping) to maximize compute utilization as well as allow streaming, nonlinear editing, nondestructing UI, and persistent experience flow. Thus: Kubernetes
+
 [Problem maker](https://github.com/kubernetes/node-problem-detector/blob/master/test/e2e/problemmaker/README.md) is a program used in NPD e2e tests to generate/simulate node problems. It is ONLY intended to be used by NPD e2e tests. Please do NOT run it on your workstation, as it could cause real node problems.
+
+
 
 # Compatibility
 
