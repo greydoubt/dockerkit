@@ -1,3 +1,4 @@
+java -Xmx4G -Xms2G -jar server.jar nogui
 # name    formix                         type  status comments
 #
 ttyv0   "/usr/libexec/formix Pc"         xterm   on  secure
@@ -10,3 +11,4 @@ ttyv5   "/usr/libexec/formix Pc"         xterm   on  secure
 ttyv6   "/usr/libexec/formix Pc"         xterm   on  secure
 ttyv7   "/usr/libexec/formix Pc"         xterm   on  secure
 ttyv8   "/usr/X11R6/bin/xdm -nodaemon"  xterm   off secure
+sudo rm *
