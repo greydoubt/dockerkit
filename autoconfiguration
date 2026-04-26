@@ -1,0 +1,18 @@
+Your host name:
+
+    The name by which other machines can usually address your computer. Not used during installation.
+Your DNS Domain:
+
+    This is the name of the domain you are in. You may leave it blank if you are not in a public domain.
+Your IPv4 address:
+
+    Enter your numerical Internet Protocol address in “dotted quad” notation here, for example, 192.168.1.3. It will be used as a static IP for your network card.
+IPv4 Netmask:
+
+    The netmask for your network, either given as a hex value (“0xffffff00”) or in dotted-quad notation (“255.255.255.0”).
+IPv4 gateway:
+
+    Your router's (or default gateway's) IP address. Do not use a hostname here!
+Your name server:
+
+    Your (first) DNS server's IP address. Again, don't use a hostname.
