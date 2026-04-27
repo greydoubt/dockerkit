@@ -1,5 +1,5 @@
-#ifndef INCLUDE_FOO_H
-#define INCLUDE_FOO_H
+#ifndef INCLUDE_PROC_INTERNAL_H
+#define INCLUDE_PROC_INTERNAL_H
 /* everything in header goes here 
 proc	bsd/sys/proc_internal.h
 vnode	bsd/sys/vnode_internal.h
