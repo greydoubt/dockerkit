@@ -13,7 +13,7 @@ fileglob	bsd/sys/file_internal.h
 mount	bsd/sys/mount_internal.h
 
 */
-#include "bsd/sys/task.h" //The source tells you what fields exist; the binary tells you where they are.
+#include "osfmk/kern/thread.h" //The source tells you what fields exist; the binary tells you where they are.
 
 
 #endif
