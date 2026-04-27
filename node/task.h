@@ -1,5 +1,5 @@
-#ifndef INCLUDE_SOCKETVAR_H
-#define INCLUDE_SOCKETVAR_H
+#ifndef INCLUDE_TASK_H
+#define INCLUDE_TASK_H
 /* everything in header goes here 
 proc	bsd/sys/proc_internal.h
 vnode	bsd/sys/vnode_internal.h
