@@ -63,3 +63,13 @@ attach()
       eerror "Did the process crash?"
    fi
 }
+
+#LANG="$LANG"
+LANG="nl_NL@euro"
+
+
+renice -n 5 $(cat ${pidfile}) >/dev/null
+# and/or
+ionice -c 3 -p $(cat ${pidfile})
+
+retry="-INT/15/-INT/5/-KILL/5"
