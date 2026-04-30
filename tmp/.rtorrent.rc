@@ -1,0 +1,27 @@
+# A watch directory downloading to the default location
+schedule2 = watch_directory_3,5,300,load.start=/home/larry/media/watch/*.torrent
+
+# Watch directories with customized download directories
+schedule2 = watch_directory_1,5,60,"load.start=/home/larry/media/watch_series/*.torrent,d.directory.set=/home/larry/media/series"
+schedule2 = watch_directory_2,5,5,"load.start=/home/larry/media/watch_music/*.torrent,d.directory.set=/home/larry/media/music"
+schedule2 = watch_directory_3,5,300,"load.start=/home/larry/media/watch_movies/*.torrent,d.directory.set=/home/larry/media/movies"
+
+# Restart torrents that have been copied back and stop those that have been deleted
+schedule2 = tied_directory,1,30,start_tied=
+schedule2 = untied_directory,1,30,close_untied=
+
+# Close torrents when diskspace is low.
+schedule2 = low_diskspace,5,60,close_low_diskspace=100M
+
+# Execute command after 5 seconds and again every 5 minutes
+schedule2 = some_command,5,300,foo
+
+# Execute command immediately and at 03:00
+schedule2 = some_command,0,03:00,foo
+default
+
+# First, enable the default ratio group, which controls all loaded torrents. Set the limits for the group next.
+group.seeding.ratio.enable=
+group2.seeding.ratio.min.set=200
+group2.seeding.ratio.max.set=300
+group2.seeding.ratio.upload.set=20M
