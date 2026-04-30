@@ -1,0 +1,10 @@
+#USER="$USER"
+USER="p2p"
+##GROUP="$GROUP"
+LANG="$LANG"
+
+TERM="xterm"
+#ENABLE_ARROWS="yes"
+
+RTORRENT_OPTS=""
+DTACH_OPTS=""
