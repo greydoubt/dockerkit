@@ -1,0 +1,65 @@
+#!/sbin/openrc-run
+
+
+description="rTorrent BitTorrent client over dtach"
+
+PWHOME="$(getent passwd $USER | awk -F ':' '{ print $6 }')"
+dtach_tmpfile="$(mktemp -u /tmp/rtorrentd.XXXXXXXXXX)"
+rtorrent_command="/usr/bin/rtorrent"
+
+description_attach="Attaches to the session (interactive console) of the rTorrent client"
+extra_started_commands="attach"
+
+start_stop_daemon_args="--env HOME=${PWHOME:-/home/$USER} --env LANG=${LANG} --env TERM=${TERM:-linux}"
+command="/usr/bin/dtach"
+command_args="-n ${dtach_tmpfile} ${rtorrent_command} ${RTORRENT_OPTS}"
+command_user="$USER"
+##command_user="$USER:$GROUP"
+pidfile="/run/rtorrentd.pid"
+## Graceful exit:
+#retry="-INT/15/-INT/5/-KILL/5"
+
+depend()
+{
+   use net ypbind nis
+   after slapd mysqld postgresql
+}
+
+start_post()
+{
+   ppid="$(lsof -a -U -u $USER | grep ${dtach_tmpfile} | awk '{ print $2 }')"
+   pgrep -P ${ppid} 1>${pidfile} 2>/dev/null || return 1
+
+   ## Modifying scheduling priority:
+   #renice -n 5 $(cat ${pidfile}) >/dev/null
+   ## and/or
+   #ionice -c 3 -p $(cat ${pidfile})
+
+   ## Group access to the rTorrent session:
+   #chmod g+rw ${dtach_tmpfile}
+
+   return 0
+}
+
+stop_pre()
+{
+   # Session still running?
+   test "$(ps -q $(cat ${pidfile}) -o comm=)" = "rtorrent main" || rm -f ${pidfile}
+}
+
+attach()
+{
+   ppid="$(ps -q $(cat ${pidfile}) -o ppid= | awk '{ print $1 }')"
+   dtach_tmpfile="$(cat /proc/${ppid}/cmdline | awk -F '\000' '{ print $3 }')"
+
+   if [ -S "${dtach_tmpfile}" ]; then
+      if [ "${ENABLE_ARROWS}" = "yes" ]; then
+         tput smkx ; eval "${command}" -a "${dtach_tmpfile}" "${DTACH_OPTS}" ; tput rmkx
+      else
+         eval "${command}" -a "${dtach_tmpfile}" "${DTACH_OPTS}"
+      fi
+   else
+      eerror "The determined socket file for dtach could not be found!"
+      eerror "Did the process crash?"
+   fi
+}
