@@ -197,6 +197,7 @@ outdated – Checks for outdated dependencies
 
 
 # 🧬 Example Workflows
+```
 ## Validate AUTHORS
 docker build --target validate .
 
@@ -215,6 +216,33 @@ docker build --target validate .
 ```
 
 
+
+# Peer to Peer Nodes: Using Secure, Self-Signed Certificates Reduces the Attack Vector Surface
+
+Adding a self-signed certificate
+
+Some trackers use SSL certificates, however most are not signed for various reasons. rTorrent uses the database located in /etc/ssl/certs/ca-certificates.crt. You also may want to use HTTPS because some ISPs (like Comcast) perform bandwidth shaping, effectively slowing down BitTorrent (regardless of whether your use is legitimate).
+
+Add a certificate (if the domain was <TRACKER_URI>.TLD and the port was 443):
+```
+openssl s_client -connect <TRACKER_URI>.TLD:443 </dev/null 2>/dev/null | sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' >> /etc/ssl/certs/ca-certificates.crt
+```
+
+You need to re-hash after adding a certificate:
+```
+c_rehash
+```
+
+Try with curl:
+```
+curl URI:443
+```
+You should not get a warning regarding the self-signed certificate.
+
+Restart rTorrent. If using the daemon:
+```
+rc-service rtorrent restart
+```
 
 
 
