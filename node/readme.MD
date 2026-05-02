@@ -24,5 +24,5 @@ migrate "exec:gpg -q -e -r KEY -o STATFILE.gpg"
 
 Load VM state from an encrypted file
 ```
-gpg -q -d -r KEY STATEFILE.gpg | <qemu-command-line> -incoming "exec:cat"
+gpg -q -d -r KEY STATFILE.gpg | <qemu-command-line> -incoming "exec:cat"
 ```
