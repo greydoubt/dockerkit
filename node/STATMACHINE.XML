@@ -1,1 +1,118 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
+<Setting>
+    <!-- This is the backup set setting -->
+    <Key name="Backup Set Setting" allowMultiple="Y">
+        <!-- Backup set type (Read Only) -->
+        <Value data="FILE" name="Type" type="string" />
+        <!-- Backup set name -->
+        <Value data="BackupSet-1" name="Name" type="string" />
+        <!-- Temporary directory for storing backup files -->
+        <Value data="/tmp" name="Temporary Working Directory" type="string" />
+        <!-- Remove temporary files after backup -->
+        <!-- Y: Yes -->
+        <!-- N: No -->
+        <Value data="Y" name="Delete temporary files after backup" type="boolean" />
+        <!-- Support of opening backup data directly without restoration -->
+        <!-- Y: Yes -->
+        <!-- N: No -->
+        <Value data="N" name="OpenDirect" type="boolean" />
+        <!-- Select compression type -->
+        <!-- GzipDefaultCompression : Normal -->
+        <!-- GzipBestSpeedCompression: Fast (Compressed size larger than normal)-->
+        <!-- SnappyDefaultCompression: Fast with optimization for local -->
+        <!-- Leave the field blank for no compression -->
+        <Value data="GzipBestSpeedCompression" name="Compression Type" type="string" />
+        <!-- Backup files' permissions -->
+        <!-- Y: Yes -->
+        <!-- N: No -->
+        <Value data="Y" name="Upload files permission" type="boolean" />
+        <!-- Follow link of the backup files -->
+        <!-- Y: Yes -->
+        <!-- N: No -->
+        <Value data="Y" name="Follow links" type="boolean" />
+        <!-- This includes the files you want to backup -->
+        <!-- Copy and paste the whole <Key> to add more selected sources -->
+        <Key name="Selected Source" allowMultiple="Y">
+        <!-- Please enter your file path, e.g. /root/Documents -->
+        <Value data="/Templates" name="Path" type="string" />
+        </Key>
+        <!-- This excludes the files from the included source -->
+        <!-- Copy and paste the whole <Key> to add more deselected sources -->
+        <Key name="Deselected Source" allowMultiple="Y">
+            <!-- Please enter your file path, e.g. /root/Documents -->
+            <Value data="/root/.obm" name="Path" type="string" />
+        </Key>
+        <Key name="Deselected Source" allowMultiple="Y">
+            <!-- Please enter your file path, e.g. /root/Documents -->
+            <Value data="/usr/local/obm" name="Path" type="string" />
+        </Key>
+        <Key name="Deselected Source" allowMultiple="Y">
+            <!-- Please enter your file path, e.g. /root/Documents -->
+            <Value data="/tmp" name="Path" type="string" />
+        </Key>
+        <!-- Settings for your scheduled backups -->
+        <Key name="Schedule Settings">
+            <!-- Enable scheduled backup on this computer -->
+            <!-- Y: Yes -->
+            <!-- N: No -->
+            <Value data="Y" name="Enable" type="boolean" />
+            <!-- Daily settings -->
+            <!-- Copy and paste the whole <Key> to add more daily schedules -->
+            <Key name="Daily Schedule Settings" allowMultiple="Y">
+            <!-- Name of schedule -->
+            <Value data="Daily-Schedule" name="Name" type="string" />
+            <!-- Start hour -->
+            <!-- 0, 1, 2... 23 -->
+            <!-- This value will be ignored if the schedule is set to be periodic ("Interval" field contains value other than -1) -->
+            <Value data="0" name="Hour" type="integer" />
+            <!-- Start minute -->
+            <!-- 0, 1, 2... 59 -->
+            <!-- This value will be ignored if the schedule is set to be periodic ("Interval" field contains value other than -1) -->
+            <Value data="0" name="Minute" type="integer" />
+            <!-- Duration of this backup in hours -->
+            <!-- 1, 2, 3... -->
+            <!-- A value of -1 means run until job finish -->
+            <!-- Duration can only be -1 if the schedule is set to be periodic ("Interval" field contains value other than -1) -->
+            <Value data="-1" name="Duration" type="integer" />
+            <!-- Interval -->
+            <!-- 1 : 1 minute -->
+            <!-- 2 : 2 minutes -->
+            <!-- 3 : 3 minutes -->
+            <!-- 4 : 4 minutes -->
+            <!-- 5 : 5 minutes -->
+            <!-- 6 : 6 minutes -->
+            <!-- 10 : 10 minutes -->
+            <!-- 12 : 12 minutes -->
+            <!-- 15 : 15 minutes -->
+            <!-- 20 : 20 minutes -->
+            <!-- 30 : 30 minutes -->
+            <!-- 60 : 1 hour -->
+            <!-- 120: 2 hours -->
+            <!-- 180: 3 hours -->
+            <!-- 240: 4 hours -->
+            <!-- 360: 6 hours -->
+            <!-- 480: 8 hours -->
+            <!-- 720: 12 hours -->
+            <!-- A value of -1 means a non-periodic normal schedule -->
+            <Value data="480" name="Interval" type="integer" />
+        </Key>
+	</Key>
+    <!-- This is the collection of destinations -->
+    <Key name="Destination Settings">
+        <Value data="1" name="concurrency-level" type="integer" />
+        <!-- AhsayCBS destination is where the files are backup to server -->
+        <Key name="AhsayCBS Destination Settings" allowMultiple="Y">
+        </Key>
+    </Key>
+    <!-- This shows the deduplication setting -->
+    <Key name="Deduplication Setting">
+        <!-- Enable deduplication -->
+        <!-- Y: Yes -->
+        <!-- N: No -->
+        <Value data="Y" name="Enable" type="boolean" />
+        <!-- Deduplication scope -->
+        <!-- F: Same file path within the same backup set -->
+        <!-- B: All files within the same backup set -->
+        <Value data="B" name="Deduplication level" type="string" />
+    </Key>
+</Setting>
