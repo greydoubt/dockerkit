@@ -1,0 +1,30 @@
+[submodule "sdl/SDL"]
+	path = sdl/SDL
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "ffmpeg/ffmpeg"]
+	path = ffmpeg/ffmpeg
+	url = https://git.ffmpeg.org/ffmpeg.git
+[submodule "moltenvk/MoltenVK"]
+	path = moltenvk/MoltenVK
+	url = https://github.com/KhronosGroup/MoltenVK.git
+[submodule "ffmpeg/x264"]
+	path = ffmpeg/x264
+	url = https://code.videolan.org/videolan/x264.git
+[submodule "ffmpeg/libvpx"]
+	path = ffmpeg/libvpx
+	url = https://github.com/warmenhoven/libvpx.git
+[submodule "ffmpeg/opus"]
+	path = ffmpeg/opus
+	url = https://gitlab.xiph.org/xiph/opus.git
+[submodule "mbedtls/mbedtls"]
+	path = mbedtls/mbedtls
+	url = https://github.com/Mbed-TLS/mbedtls.git
+[submodule "kscrash/KSCrash"]
+	path = kscrash/KSCrash
+	url = https://github.com/kstenerud/KSCrash.git
+[submodule "libsmb2/libsmb2"]
+	path = libsmb2/libsmb2
+	url = https://github.com/sahlberg/libsmb2.git
+[submodule "glslang/glslang"]
+	path = glslang/glslang
+	url = https://github.com/KhronosGroup/glslang.git
