@@ -1,0 +1,33 @@
+-- BindToSimulation introduces a long-requested API that allows you to run script logic at a fixed frequency, ensuring gameplay remains consistent regardless of a player’s framerate.
+
+RunService:BindToSimulation(callback_function(), frequency_time_per_cycle_value)
+
+
+
+-- Simultaneously, the UseFixedSimulation rollout standardizes internal engine systems like animations to a fixed update rate to reduce frame-rate dependent gameplay and support server authority.
+
+-- IMMUTABLE: Not Scriptable / Changeable by Host of the VM
+-- Read Parallel by the Host VM
+
+-- When true, enables RunService:BindToSimulation() which calls a function at a fixed frequency, updates physics stepping logic, and makes the time() function return the fixed stepped frame time.
+Workspace.UseFixedSimulation:Enum.RolloutState
+
+-- When true, enables RunService:BindToSimulation() which calls a function at a fixed frequency. Also updates physics stepping logic such that character controller updates and joint transforms are performed at a fixed frequency rather than once per frame, as well as makes the time() function return the fixed stepped frame time.
+
+
+local Workspace = game:GetService("Workspace")
+
+-- Finished moving a selection; make joints
+local function finishedMovingParts(parts)
+	local joinMode = Plugin:GetJoinMode()
+	Workspace:JoinToOutsiders(parts, joinMode)
+end
+
+local Workspace = game:GetService("Workspace")
+
+-- Started moving a selection; break joints
+local function startMovingParts(parts)
+	Workspace:UnjoinFromOutsiders(parts)
+end
+
+-- Thread safety:	Unsafe
