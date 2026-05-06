@@ -1,0 +1,5 @@
+volumes:
+  nginx-config:
+    driver: local     # explicitly using local driver (nfs, tmpfs (in-memory), cloud )
+  nginx-html:         # defaul takes local
+  nginx-logs:         # defaul takes local
