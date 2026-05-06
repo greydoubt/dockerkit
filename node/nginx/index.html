@@ -1,0 +1,111 @@
+<h1 id="sample-markdown">Sample Markdown</h1>
+<h1 id="publishing-and-exposing-ports">Publishing and exposing ports</h1>
+<h2 id="explanation">Explanation</h2>
+<p>If you&#39;ve been following the guides so far, you understand that containers provide isolated processes for each component of your application. Each component - a React frontend, a Python API, and a Postgres database - runs in its own sandbox environment, completely isolated from everything else on your host machine. This isolation is great for security and managing dependencies, but it also means you can’t access them directly. For example, you can’t access the web app in your browser.</p>
+<p>That’s where port publishing comes in.</p>
+<h3 id="publishing-ports">Publishing ports</h3>
+<p>Publishing a port provides the ability to break through a little bit of networking isolation by setting up a forwarding rule. As an example, you can indicate that requests on your host’s port <code>8080</code> should be forwarded to the container’s port <code>80</code>. Publishing ports happens during container creation using the <code>-p</code> (or <code>--publish</code>) flag with <code>docker run</code>. The syntax is:</p>
+<pre><code class="lang-console">$ docker <span class="hljs-keyword">run</span><span class="bash"> <span class="hljs-_">-d</span> -p HOST_PORT:CONTAINER_PORT nginx</span>
+</code></pre>
+<ul>
+<li><code>HOST_PORT</code>: The port number on your host machine where you want to receive traffic</li>
+<li><code>CONTAINER_PORT</code>: The port number within the container that&#39;s listening for connections</li>
+</ul>
+<p>For example, to publish the container&#39;s port <code>80</code> to host port <code>8080</code>:</p>
+<pre><code class="lang-console">$ docker <span class="hljs-keyword">run</span><span class="bash"> <span class="hljs-_">-d</span> -p 8080:80 nginx</span>
+</code></pre>
+<p>Now, any traffic sent to port <code>8080</code> on your host machine will be forwarded to port <code>80</code> within the container.</p>
+<blockquote>
+<p>[!IMPORTANT]</p>
+<p>When a port is published, it&#39;s published to all network interfaces by default. This means any traffic that reaches your machine can access the published application. Be mindful of publishing databases or any sensitive information. <a href="/engine/network/#published-ports">Learn more about published ports here</a>.</p>
+</blockquote>
+<h3 id="publishing-to-ephemeral-ports">Publishing to ephemeral ports</h3>
+<p>At times, you may want to simply publish the port but don’t care which host port is used. In these cases, you can let Docker pick the port for you. To do so, simply omit the <code>HOST_PORT</code> configuration. </p>
+<p>For example, the following command will publish the container’s port <code>80</code> onto an ephemeral port on the host:</p>
+<pre><code class="lang-console">$ docker <span class="hljs-keyword">run</span><span class="bash"> -p 80 nginx</span>
+</code></pre>
+<p>Once the container is running, using <code>docker ps</code> will show you the port that was chosen:</p>
+<pre><code class="lang-console">docker ps
+CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS          PORTS                    NAMES
+a527355c9c53   nginx         <span class="hljs-string">"/docker-entrypoint.…"</span>   <span class="hljs-number">4</span> seconds ago    <span class="hljs-meta">Up</span> <span class="hljs-number">3</span> seconds    <span class="hljs-number">0.0</span><span class="hljs-meta">.0</span><span class="hljs-meta">.0</span>:<span class="hljs-number">54772</span>-&gt;<span class="hljs-number">80</span>/tcp    romantic_williamson
+</code></pre>
+<p>In this example, the app is exposed on the host at port <code>54772</code>.</p>
+<h3 id="publishing-all-ports">Publishing all ports</h3>
+<p>When creating a container image, the <code>EXPOSE</code> instruction is used to indicate the packaged application will use the specified port. These ports aren&#39;t published by default. </p>
+<p>With the <code>-P</code> or <code>--publish-all</code> flag, you can automatically publish all exposed ports to ephemeral ports. This is quite useful when you’re trying to avoid port conflicts in development or testing environments.</p>
+<p>For example, the following command will publish all of the exposed ports configured by the image:</p>
+<pre><code class="lang-console">$ docker <span class="hljs-keyword">run</span><span class="bash"> -P nginx</span>
+</code></pre>
+<h2 id="try-it-out">Try it out</h2>
+<p>In this hands-on guide, you&#39;ll learn how to publish container ports using both the CLI and Docker Compose for deploying a web application.</p>
+<h3 id="use-the-docker-cli">Use the Docker CLI</h3>
+<p>In this step, you will run a container and publish its port using the Docker CLI.</p>
+<ol>
+<li><p><a href="/get-started/get-docker/">Download and install</a> Docker Desktop.</p>
+</li>
+<li><p>In a terminal, run the following command to start a new container:</p>
+<pre><code class="lang-console"> $ docker <span class="hljs-keyword">run</span><span class="bash"> <span class="hljs-_">-d</span> -p 8080:80 docker/welcome-to-docker</span>
+</code></pre>
+<p> The first <code>8080</code> refers to the host port. This is the port on your local machine that will be used to access the application running inside the container. The second <code>80</code> refers to the container port. This is the port that the application inside the container listens on for incoming connections. Hence, the command binds to port <code>8080</code> of the host to port <code>80</code> on the container system.</p>
+</li>
+<li><p>Verify the published port by going to the <strong>Containers</strong> view of the Docker Desktop Dashboard.</p>
+<p><img src="/get-started/docker-concepts/running-containers/publishing-ports/images/published-ports.webp?w=5000&amp;border=true" alt="A screenshot of Docker Desktop Dashboard showing the published port"></p>
+</li>
+<li><p>Open the website by either selecting the link in the <strong>Port(s)</strong> column of your container or visiting <a href="http://localhost:8080">http://localhost:8080</a> in your browser.</p>
+<p><img src="/get-started/docker-concepts/the-basics/images/access-the-frontend.webp?border=true" alt="A screenshot of the landing page of the Nginx web server running in a container"></p>
+</li>
+</ol>
+<h3 id="use-docker-compose">Use Docker Compose</h3>
+<p>This example will launch the same application using Docker Compose:</p>
+<ol>
+<li><p>Create a new directory and inside that directory, create a <code>compose.yaml</code> file with the following contents:</p>
+<pre><code class="lang-yaml"><span class="hljs-symbol"> services:</span>
+<span class="hljs-symbol">   app:</span>
+<span class="hljs-symbol">     image:</span> docker/welcome-to-docker
+<span class="hljs-symbol">     ports:</span>
+       - <span class="hljs-number">8080</span>:<span class="hljs-number">80</span>
+</code></pre>
+<p> The <code>ports</code> configuration accepts a few different forms of syntax for the port definition. In this case, you’re using the same <code>HOST_PORT:CONTAINER_PORT</code> used in the <code>docker run</code> command.</p>
+</li>
+<li><p>Open a terminal and navigate to the directory you created in the previous step.</p>
+</li>
+<li><p>Use the <code>docker compose up</code> command to start the application. </p>
+</li>
+<li><p>Open your browser to <a href="http://localhost:8080">http://localhost:8080</a>.</p>
+</li>
+</ol>
+<h2 id="additional-resources">Additional resources</h2>
+<p>If you’d like to dive in deeper on this topic, be sure to check out the following resources:</p>
+<ul>
+<li><a href="/reference/cli/docker/container/port/"><code>docker container port</code> CLI reference</a></li>
+<li><a href="/engine/network/#published-ports">Published ports</a></li>
+</ul>
+<h2 id="next-steps">Next steps</h2>
+<p>Now that you understand how to publish and expose ports, you&#39;re ready to learn how to override the container defaults using the <code>docker run</code> command.</p>
+<p><a href="/get-started/docker-concepts/running-containers/publishing-ports/overriding-container-defaults">Overriding container defaults</a></p>
+<p>This is some basic, sample markdown.</p>
+<h2 id="second-heading">Second Heading</h2>
+<ul>
+<li>Unordered lists, and:<ol>
+<li>One</li>
+<li>Two</li>
+<li>Three</li>
+</ol>
+</li>
+<li>More</li>
+</ul>
+<blockquote>
+<p>Blockquote</p>
+</blockquote>
+<p>And <strong>bold</strong>, <em>italics</em>, and even <em>italics and later <strong>bold</strong></em>. Even <del>strikethrough</del>. <a href="https://markdowntohtml.com">A link</a> to somewhere.</p>
+<p>And code highlighting:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">'bar'</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">baz</span><span class="hljs-params">(s)</span> </span>{
+   <span class="hljs-keyword">return</span> foo + <span class="hljs-string">':'</span> + s;
+}
+</code></pre>
+<p>Or inline code like <code>var foo = &#39;bar&#39;;</code>.</p>
+<p>Or an image of bears</p>
+<p><img src="http://placebear.com/200/200" alt="bears"></p>
+<p>The end ...</p>
