@@ -1,11 +1,32 @@
+import { logger } from 'log';
+
+export function onClientRequest (request) {
+	
+  // Outputs a message to the X-onClientRequest-Log header
+	
+  logger.log('Responding with R-200 from the path: %s', request.path);
+  request.respondWith(
+    200, {},
+    '<html><body><h1>Hello World From EDGE NODE</h1></body></html>');
+}
+
+export function onClientResponse (request, response) {
+  // Outputs a message to the X-onClientResponse-Log header
+	
+  logger.log('Adding a header in ClientResponse');
+
+  response.setHeader('X-Header', 'From Edge Node Worker');
+}
+
+
 // Website you intended to retrieve for users.
-const upstream = 'www.google.com'
+const upstream = 'www.github.com/greydoubt'
 
 // Custom pathname for the upstream website.
 const upstream_path = '/'
 
 // Website you intended to retrieve for users using mobile devices.
-const upstream_mobile = 'www.google.com'
+const upstream_mobile = 'www.github.com/greydoubt'
 
 // Countries and regions where you wish to suspend your service.
 const blocked_region = ['CN', 'KP', 'SY', 'PK', 'CU']
