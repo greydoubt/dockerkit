@@ -1,0 +1,15 @@
+name: Update server code and restart the server
+on: [push]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update server code and restart the server
+        uses: appleboy/ssh-action@v1 # standard SSH library https://github.com/appleboy/ssh-action
+        with:
+          host: ${{ secrets.HOST }}
+          username: your-username # this is the reseerve username (root or default if rootless setup)
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            ~/bin/pull-all.sh
