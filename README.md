@@ -792,4 +792,134 @@ Node problem detector's architecture has been fairly stable. Recent versions (v0
 
 
 
+
+## Standard POSIX Configuration files
+
+/etc/rc.conf
+```
+#
+# Added by installer
+#
+clear_tmp_enable="YES"
+syslogd_flags="-ss"
+sendmail_enable="NONE"
+hostname="t480"
+ntpdate_enable="YES"
+ntpd_enable="YES"
+# Set dumpdev to "AUTO" to enable crash dumps, "NO" to disable
+dumpdev="AUTO"
+zfs_enable="YES"
+```
+# Power saving, see https://www.c0ffee.net/blog/freebsd-on-a-laptop/
+```
+powerdxx_enable="YES"
+performance_cx_lowest="Cmax"
+economy_cx_lowest="Cmax"
+```
+
+
+# Intel Graphics driver
+```
+kld_list="/boot/modules/i915kms.ko"
+```
+
+# Readable font size at console
+```
+allscreens_flags="-f terminus-b32"
+```
+
+# For XOrg
+```
+dbus_enable="YES"
+```
+
+# Don't pause during boot for DHCP
+```
+background_dhclient="YES"
+```
+
+# Networking; use ethernet if available, otherwise use WiFi
+# https://www.freebsd.org/doc/handbook/network-aggregation.html
+```
+ifconfig_em0="up"
+wlans_iwm0="wlan0"
+ifconfig_wlan0="WPA country CA powersave"
+create_args_wlan0="wlanaddr 98:fa:9b:6c:e4:4f"
+# Same as em0 MAC address cloned_interfaces="lagg0"
+ifconfig_lagg0="up laggproto failover laggport em0 laggport wlan0 DHCP"
+```
+
+
+# Webcam
+```
+webcamd_enable="YES"
+webcamd_0_flags="-d ugen0.3" # visible light camera
+webcamd_1_flags="-d ugen0.2" # IR camera
+```
+
+# CUPS (allow printing)
+```
+cupsd_enable="YES"
+/etc/sysctl.conf
+# Added by the installer
+security.bsd.unprivileged_read_msgbuf=0
+security.bsd.unprivileged_proc_debug=0
+kern.randompid=1
+vfs.zfs.min_auto_ashift=12
+```
+
+# Allow sleep on lid close
+```
+hw.acpi.lid_switch_state=S3
+```
+
+# Disable system bell / bell everywhere
+```
+kern.vt.enable_bell=0
+```
+
+# Allow mounting FUSE filesystems
+```
+vfs.usermount=1
+/boot/loader.conf
+```
+
+# Added by installer
+```
+aesni_load="YES"
+geom_eli_load="YES"
+security.bsd.allow_destructive_dtrace=0
+kern.geom.label.disk_ident.enable="0"
+kern.geom.label.gptid.enable="0"
+zfs_load="YES"
+```
+
+# Improved power and video support
+```
+acpi_ibm_load="YES"
+# For webcam
+cuse_load="YES"
+```
+
+# WiFi
+```
+if_iwm_load="YES"
+iwm8265fw_load="YES"
+```
+
+# Touchpad driver
+```
+hw.psm.synaptics_support="1"
+```
+
+
+# Place devices in low power state when suitable driver not found
+```
+# (man 4 pci)
+hw.pci.do_power_nodriver=3
+```
+
+
+
+
 ## KUBERNETES TUTORIAL
