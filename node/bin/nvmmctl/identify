@@ -1,0 +1,8 @@
+nvmm: Kernel API version 2
+nvmm: State size 1008
+nvmm: Max machines 128
+nvmm: Max VCPUs per machine 256
+nvmm: Max RAM per machine 128G
+nvmm: Arch Mach conf 0
+nvmm: Arch VCPU conf 0x3<CPUID,TPR>
+nvmm: Guest FPU states 0x3<x87,SSE>
