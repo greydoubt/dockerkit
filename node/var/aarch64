@@ -1,0 +1,15 @@
+Architecture:                         aarch64
+CPU op-mode(s):                       64-bit
+Byte Order:                           Little Endian
+CPU(s):                               12
+On-line CPU(s) list:                  0-11
+Vendor ID:                            ARM
+Model name:                           Cortex-A520
+Core(s) per socket:                   4
+CPU max MHz:                          1799.9980
+CPU min MHz:                          799.9990
+...
+Model name:                           Cortex-A720
+Core(s) per socket:                   8
+CPU max MHz:                          2600.1980
+CPU min MHz:                          799.8400
